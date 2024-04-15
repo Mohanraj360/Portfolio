@@ -1,4 +1,3 @@
-import ImageWrapper from "@/components/image-wrapper";
 import NoiseTexture from "@/components/noise-texture";
 import FooterBg from "@/modules/footer/footer-bg";
 import FooterCopyrights from "@/modules/footer/footer-copyrights";
