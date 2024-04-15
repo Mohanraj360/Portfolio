@@ -26,7 +26,6 @@ export default function Header() {
 
   return (
     <header css={homeHeaderWrapperCss}>
-      <Logo />
       <div css={headerTextWrapperCss}>
         <Link href={locationLink} css={locationWrapperCss} rel="noopener noreferrer" target="_blank">
           <span>{city}</span>
