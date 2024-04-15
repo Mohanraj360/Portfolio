@@ -11,7 +11,6 @@ export default function Footer() {
       <NoiseTexture />
       <div css={footerBlobOneCss} />
       <FooterMain />
-      <Logo />
       <FooterCopyrights />
       <FooterCredits />
       <FooterBg />
