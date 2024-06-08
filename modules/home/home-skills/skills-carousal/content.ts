@@ -8,6 +8,10 @@ export const skillData = [
     img: "/images/skills/javascript.png"
   },
   {
+    title: "Typescript",
+    img: "/images/skills/typescript.png"
+  },
+  {
     title: "HTML",
     img: "/images/skills/html.png"
   },
@@ -18,6 +22,10 @@ export const skillData = [
   {
     title: "Figma",
     img: "/images/skills/figma.png"
+  },
+  {
+    title: "Three.js",
+    img: "/images/skills/three-js.png"
   },
   {
     title: "Java",
