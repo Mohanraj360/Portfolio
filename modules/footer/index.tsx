@@ -11,7 +11,6 @@ export default function Footer() {
       <div css={footerBlobOneCss} />
       <FooterMain />
       <FooterCopyrights />
-      <FooterCredits />
       <FooterBg />
     </footer>
   );
