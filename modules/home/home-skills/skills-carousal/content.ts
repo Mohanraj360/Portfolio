@@ -24,7 +24,7 @@ export const skillData = [
     img: "/images/skills/figma.png"
   },
   {
-    title: "Three.js",
+    title: "Next.js",
     img: "/images/skills/three-js.png"
   },
   {
