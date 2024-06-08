@@ -2,7 +2,7 @@ export const workData = [
   {
     siteName: "Travol",
     siteLink: "https://mohanraj360.github.io/Travol/",
-    siteImg: "/images/work/Travol.jpg",
+    siteImg: "/images/work/Travol1.jpg",
     customColor: "hsla(70, 80%, 90%, 1)"
   },
   {
