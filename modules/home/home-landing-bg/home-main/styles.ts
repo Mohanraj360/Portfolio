@@ -11,9 +11,10 @@ export const mainCss = css`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 1.5rem; /* Smoother, predictable spacing between headline and subtext */
+  /* Replaced strict padding variables with a clean vertical layout gap */
+  gap: 1.5rem; 
   background-color: transparent;
-  
+
   ${mediaQuery.tablet} {
     gap: 2rem;
   }
@@ -25,9 +26,10 @@ export const h1WrapperCss = css`
   align-items: center;
   text-align: center;
   font-weight: 800;
-  letter-spacing: -0.03em;
-  /* Fluid typography: auto-scales beautifully between mobile and desktop */
-  font-size: clamp(2.2rem, 6vw, 4.5rem); 
+  letter-spacing: -0.02em;
+  
+  /* Fluid sizing dynamically transitions between desktop and mobile devices smoothly */
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
   line-height: 1.1;
 
   ${mediaQuery.tablet} {
@@ -41,10 +43,10 @@ export const nameSpanContainerCss = css`
   justify-content: center;
   flex-wrap: wrap;
   gap: 0.3em;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
   
-  /* Creates a premium glowing text gradient for your name */
-  background: linear-gradient(135deg, #ffffff 30%, #a855f7 100%);
+  /* Modern clean color gradient setup for your name */
+  background: linear-gradient(135deg, #ffffff 40%, #a855f7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 `;
@@ -53,17 +55,18 @@ export const h1SpanCss = css`
   display: block;
   font-weight: 700;
   letter-spacing: -0.01em;
-  
-  /* Targets the roles ("Data Analyst", "Web Developer") to differentiate them from your name */
+  line-height: 1.2;
+
+  /* Formats the layout of your secondary skill rows beneath your name */
   &:not(${nameSpanContainerCss}) {
-    font-size: 0.85em; /* Slightly smaller than your name for proper visual hierarchy */
+    font-size: 0.85em; 
     
-    /* Elegant Cyan/Blue highlight for your primary core skill */
+    /* "Data Analyst" receives a prominent clean neon-cyan accent color */
     &:nth-of-type(2) {
-      color: #38bdf8; 
+      color: #38bdf8;
     }
     
-    /* Secondary role returns to a clean, slightly muted white */
+    /* "Web Developer" falls back cleanly into a crisp subtle white */
     &:nth-of-type(3) {
       color: #ffffff;
       opacity: 0.9;
@@ -75,9 +78,15 @@ export const h2Css = css`
   text-align: center;
   font-weight: 400;
   color: #ffffff;
-  opacity: 0.75; /* Softens the subtext so it doesn't fight for attention */
-  max-width: 680px; /* Prevents the text from stretching too wide on massive screens */
-  width: 85%;
+  
+  /* Softens the text visibility layer so it doesn't fight against the giant H1 title */
+  opacity: 0.75; 
+  
+  /* Restricts paragraph block width on high-resolution screens to preserve typography balance */
+  max-width: 640px; 
+  width: 88%;
+  
+  /* Perfect typographic scale for body paragraphs */
   font-size: 1rem;
   line-height: 1.6;
   letter-spacing: 0.01em;
