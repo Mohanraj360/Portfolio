@@ -24,7 +24,7 @@ export default function HomeMain() {
     return () => removeEventListener("scroll", mainScrollHandler);
   });
   const h1Mapper = (text: string) => {
-    if (text.includes("Sai")) {
+    if (text.includes("Mohanraj S")) {
       return (
         <span css={nameSpanContainerCss} key={`h1-span-${text}`}>
           {text.split(" ").map((word: string) => {
