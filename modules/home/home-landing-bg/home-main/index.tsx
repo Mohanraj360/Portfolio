@@ -1,4 +1,4 @@
-import { h1Content, h2Text } from "@/modules/home/home-landing-bg/home-main/content";
+import { h1Contents, h2Text } from "@/modules/home/home-landing-bg/home-main/content";
 import {
   h1SpanCss,
   h1WrapperCss,
@@ -43,10 +43,9 @@ export default function HomeMain() {
       addEventListener("scroll", mainScrollHandler);
     }
     return () => removeEventListener("scroll", mainScrollHandler);
-  }, []); // Added stable dependency array
+  }, []); 
 
   const h1Mapper = (text: string, index: number) => {
-    // FIX: Changed condition to match your exact name string "S.Mohanraj"
     if (text.includes("Mohanraj")) {
       return (
         <span 
@@ -56,7 +55,6 @@ export default function HomeMain() {
             css`
               display: inline-block;
               margin-bottom: 0.4rem;
-              /* Premium 3-tone shifting color gradient */
               background: linear-gradient(270deg, #ffffff, #a855f7, #38bdf8);
               background-size: 200% 200%;
               -webkit-background-clip: text;
@@ -76,7 +74,6 @@ export default function HomeMain() {
       );
     }
 
-    // Styles for your roles ("Data Analyst" and "Web Developer")
     const isDataAnalyst = text.includes("Data Analyst");
     
     return (
@@ -87,10 +84,8 @@ export default function HomeMain() {
           css`
             display: block;
             font-size: 0.85em;
-            /* Data Analyst gets an electric cyan highlight, Web Dev stays white */
             color: isDataAnalyst ? '#38bdf8' : '#ffffff';
             opacity: 0;
-            /* Dynamically staggers the animations based on array position */
             animation: ${fadeInUp} 1s cubic-bezier(0.16, 1, 0.3, 1) ${0.15 * index}s forwards;
           `
         ]}
@@ -117,7 +112,8 @@ export default function HomeMain() {
           `
         ]}
       >
-        {h1Content.map(h1Mapper)}
+        {/* CHANGED: Mapping over h1Contents to perfectly match your data export */}
+        {h1Contents.map(h1Mapper)}
       </h1>
       
       <h2 
