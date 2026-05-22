@@ -1,5 +1,24 @@
 import { mediaQuery } from "@/styles/media-queries";
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
+
+// 1. Animation: Smoothly slides up and fades in text when page loads
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+// 2. Animation: Gently moves the gradient background across your name
+const gradientMove = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
 
 export const mainCss = css`
   height: 100vh;
@@ -11,7 +30,6 @@ export const mainCss = css`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  /* Replaced strict padding variables with a clean vertical layout gap */
   gap: 1.5rem; 
   background-color: transparent;
 
@@ -27,10 +45,11 @@ export const h1WrapperCss = css`
   text-align: center;
   font-weight: 800;
   letter-spacing: -0.02em;
-  
-  /* Fluid sizing dynamically transitions between desktop and mobile devices smoothly */
   font-size: clamp(2.2rem, 6vw, 4.5rem);
   line-height: 1.1;
+
+  /* Triggers the entry animation for the main title */
+  animation: ${fadeInUp} 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 
   ${mediaQuery.tablet} {
     font-size: clamp(3rem, 8vw, 5.5rem);
@@ -45,10 +64,14 @@ export const nameSpanContainerCss = css`
   gap: 0.3em;
   margin-bottom: 0.5rem;
   
-  /* Modern clean color gradient setup for your name */
-  background: linear-gradient(135deg, #ffffff 40%, #a855f7 100%);
+  /* Upgraded to a 3-tone moving gradient for an active fluid color feel */
+  background: linear-gradient(270deg, #ffffff, #a855f7, #38bdf8);
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  
+  /* Attaches the looping shift effect to your name */
+  animation: ${gradientMove} 6s ease infinite;
 `;
 
 export const h1SpanCss = css`
@@ -57,19 +80,19 @@ export const h1SpanCss = css`
   letter-spacing: -0.01em;
   line-height: 1.2;
 
-  /* Formats the layout of your secondary skill rows beneath your name */
   &:not(${nameSpanContainerCss}) {
     font-size: 0.85em; 
     
-    /* "Data Analyst" receives a prominent clean neon-cyan accent color */
     &:nth-of-type(2) {
       color: #38bdf8;
+      /* Staggers the fade-in slightly so the roles appear just after your name */
+      animation: ${fadeInUp} 1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
     }
     
-    /* "Web Developer" falls back cleanly into a crisp subtle white */
     &:nth-of-type(3) {
       color: #ffffff;
       opacity: 0.9;
+      animation: ${fadeInUp} 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
     }
   }
 `;
@@ -78,18 +101,15 @@ export const h2Css = css`
   text-align: center;
   font-weight: 400;
   color: #ffffff;
-  
-  /* Softens the text visibility layer so it doesn't fight against the giant H1 title */
   opacity: 0.75; 
-  
-  /* Restricts paragraph block width on high-resolution screens to preserve typography balance */
   max-width: 640px; 
   width: 88%;
-  
-  /* Perfect typographic scale for body paragraphs */
   font-size: 1rem;
   line-height: 1.6;
   letter-spacing: 0.01em;
+
+  /* Delays the paragraph fade-in so it finishes the full layout entry sequence sequence */
+  animation: ${fadeInUp} 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
 
   ${mediaQuery.tablet} {
     font-size: 1.125rem;
