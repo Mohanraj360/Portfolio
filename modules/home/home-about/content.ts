@@ -1,4 +1,4 @@
 export const aboutHeadingText = "About Me";
 export const aboutText =
-  "A college student currently pursuing my Master of Computer Application. I love coding in general, frontend being my forte. I love making websites interactive, responsive, and smooth. Absolutely love hover, motion and scroll animations. I'm open to freelancing opportunities and eager to collaborate!.";
+  "Data Analyst specializing in retail insights. I’m passionate about building AI-driven automation and intelligent business solutions that turn complex data into actionable strategy. Welcome to my portfolio!. I'm open to freelancing opportunities and eager to collaborate!.";
 export const aboutCtaText = "Contact";
