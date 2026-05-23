@@ -3,8 +3,8 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 
 const EYES = [
-  { xPct: 0.4237, yPct: 0.3951 }, // Left lens - true center
-  { xPct: 0.7345, yPct: 0.3951 }, // Right lens - true center
+  { xPct: 0.4237, yPct: 0.3860 }, // Left lens - precise center
+  { xPct: 0.6921, yPct: 0.3860 }, // Right lens - precise center
 ];
 
 const CONTAINER_SIZE = 260;
