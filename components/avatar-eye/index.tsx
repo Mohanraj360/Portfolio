@@ -2,22 +2,23 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 
-const EYES = [
-  { xPct: 0.4237, yPct: 0.3860 }, // Left lens - precise center
-  { xPct: 0.6921, yPct: 0.3860 }, // Right lens - precise center
-];
-
 const CONTAINER_SIZE = 260;
-const EYE_SCLERA_WIDTH = 10;
-const EYE_SCLERA_HEIGHT = 4.5;
-const PUPIL_RADIUS = 3.8;
+const EYE_WIDTH = 10;
+const EYE_HEIGHT = 4.5;
+const PUPIL_SIZE = 3.8;
 const MAX_OFFSET = 2.5;
-const GLINT_SIZE = 1;
+
+const EYES = [
+  { topPct: 35.8, leftPct: 44.3 }, // Left lens
+  { topPct: 35.8, leftPct: 55.2 }, // Right lens
+];
 
 export default function AvatarEye() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const pupilRefs = useRef<(SVGCircleElement | null)[]>([null, null]);
-  const glintRefs = useRef<(SVGCircleElement | null)[]>([null, null]);
+  const leftPupilRef = useRef<HTMLDivElement>(null);
+  const rightPupilRef = useRef<HTMLDivElement>(null);
+  
+  const pupilRefs = [leftPupilRef, rightPupilRef];
 
   useEffect(() => {
     const container = containerRef.current;
@@ -26,13 +27,12 @@ export default function AvatarEye() {
     const track = (mx: number, my: number) => {
       const rect = container.getBoundingClientRect();
 
-      EYES.forEach((eye, i) => {
-        const pupil = pupilRefs.current[i];
-        const glint = glintRefs.current[i];
-        if (!pupil || !glint) return;
+      pupilRefs.forEach((pupilRef, i) => {
+        if (!pupilRef.current) return;
 
-        const eyeX = rect.left + rect.width * eye.xPct;
-        const eyeY = rect.top + rect.height * eye.yPct;
+        const eyePos = EYES[i];
+        const eyeX = rect.left + (rect.width * eyePos.leftPct) / 100;
+        const eyeY = rect.top + (rect.height * eyePos.topPct) / 100;
 
         const dx = mx - eyeX;
         const dy = my - eyeY;
@@ -47,11 +47,7 @@ export default function AvatarEye() {
           oy = Math.sin(angle) * offset;
         }
 
-        pupil.setAttribute("cx", String(ox));
-        pupil.setAttribute("cy", String(oy));
-
-        glint.setAttribute("cx", String(ox + 1.2));
-        glint.setAttribute("cy", String(oy - 1.2));
+        pupilRef.current.style.transform = `translate(${ox}px, ${oy}px)`;
       });
     };
 
@@ -95,59 +91,65 @@ export default function AvatarEye() {
         }}
       />
 
-      <svg
+      {/* 🔹 LEFT EYE CONTAINER */}
+      <div
         style={{
           position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          pointerEvents: "none",
+          top: `${EYES[0].topPct}%`,
+          left: `${EYES[0].leftPct}%`,
+          width: `${EYE_WIDTH}px`,
+          height: `${EYE_HEIGHT}px`,
+          backgroundColor: "#ffffff",
+          borderRadius: "50%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           zIndex: 2,
         }}
-        viewBox={`0 0 ${CONTAINER_SIZE} ${CONTAINER_SIZE}`}
       >
-        {EYES.map((eye, i) => {
-          const cx = CONTAINER_SIZE * eye.xPct;
-          const cy = CONTAINER_SIZE * eye.yPct;
+        {/* Left Moving Pupil */}
+        <div
+          ref={leftPupilRef}
+          style={{
+            width: `${PUPIL_SIZE}px`,
+            height: `${PUPIL_SIZE}px`,
+            backgroundColor: "#0A0A0A",
+            borderRadius: "50%",
+            position: "relative",
+            transition: "transform 0.02s ease-out",
+          }}
+        />
+      </div>
 
-          return (
-            <g key={i} transform={`translate(${cx} ${cy})`}>
-              {/* White sclera */}
-              <ellipse
-                cx="0"
-                cy="0"
-                rx={EYE_SCLERA_WIDTH / 2}
-                ry={EYE_SCLERA_HEIGHT / 2}
-                fill="white"
-              />
-
-              {/* Black pupil */}
-              <circle
-                ref={(el) => {
-                  pupilRefs.current[i] = el;
-                }}
-                cx="0"
-                cy="0"
-                r={PUPIL_RADIUS}
-                fill="#0A0A0A"
-              />
-
-              {/* White glint */}
-              <circle
-                ref={(el) => {
-                  glintRefs.current[i] = el;
-                }}
-                cx={1.2}
-                cy={-1.2}
-                r={GLINT_SIZE}
-                fill="white"
-                opacity="0.95"
-              />
-            </g>
-          );
-        })}
-      </svg>
+      {/* 🔹 RIGHT EYE CONTAINER */}
+      <div
+        style={{
+          position: "absolute",
+          top: `${EYES[1].topPct}%`,
+          left: `${EYES[1].leftPct}%`,
+          width: `${EYE_WIDTH}px`,
+          height: `${EYE_HEIGHT}px`,
+          backgroundColor: "#ffffff",
+          borderRadius: "50%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 2,
+        }}
+      >
+        {/* Right Moving Pupil */}
+        <div
+          ref={rightPupilRef}
+          style={{
+            width: `${PUPIL_SIZE}px`,
+            height: `${PUPIL_SIZE}px`,
+            backgroundColor: "#0A0A0A",
+            borderRadius: "50%",
+            position: "relative",
+            transition: "transform 0.02s ease-out",
+          }}
+        />
+      </div>
     </div>
   );
 }
