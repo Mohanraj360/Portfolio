@@ -84,8 +84,8 @@ export default function AvatarEye() {
           const cy = H * eye.yPct;
           return (
             <g key={i} transform={`translate(${cx} ${cy})`}>
-              {/* Cover original green iris — exact size of eye white */}
-              <ellipse cx="0" cy="0" rx="10" ry="4.5" fill="white"/>
+              {/* Cover original green iris fully — slightly oversized to hide edges */}
+              <ellipse cx="0" cy="0" rx="12" ry="6" fill="white"/>
               {/* Black pupil — sized to fit inside eye white */}
               <circle
                 ref={el => { pupilRefs.current[i] = el; }}
