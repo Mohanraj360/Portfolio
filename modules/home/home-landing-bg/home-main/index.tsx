@@ -10,7 +10,7 @@ import { useEffect, useRef } from "react";
 import AvatarEye from "@/components/avatar-eye";
 import { css, keyframes } from "@emotion/react";
 
-// 1. Text Entry Keyframes
+// 1. Animation Keyframes
 const fadeInUp = keyframes`
   from {
     opacity: 0;
@@ -22,7 +22,6 @@ const fadeInUp = keyframes`
   }
 `;
 
-// 2. Continuous Glowing Gradient Keyframes
 const gradientShift = keyframes`
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -99,43 +98,41 @@ export default function HomeMain() {
   return (
     <main css={mainCss} ref={mainRef}>
       
-      {/* NEW SIDE-BY-SIDE FLEX CONTAINER */}
+      {/* Structural Flex Layout Wrapper */}
       <div css={css`
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: center;
-        gap: 3rem;
-        width: 90%;
+        gap: 4rem;
+        width: 100%;
         max-width: 1200px;
         margin: 0 auto;
+        padding: 0 2rem;
 
-        /* Standard mobile fallback: stacks avatar on top if screen is narrow */
-        @media (max-width: 768px) {
+        @media (max-width: 968px) {
           flex-direction: column;
-          gap: 1.5rem;
+          gap: 2rem;
           text-align: center;
         }
       `}>
         
-        {/* Left Hand Side: Avatar Box */}
+        {/* Left Side Layer: Moving Avatar */}
         <div css={css`
           flex-shrink: 0;
-          display: flex;
-          justify-content: center;
-          align-items: center;
+          z-index: 5;
         `}>
           <AvatarEye />
         </div>
 
-        {/* Right Hand Side: Content Text Box */}
+        {/* Right Side Layer: All Introduction Content */}
         <div css={css`
           display: flex;
           flex-direction: column;
           align-items: flex-start;
           text-align: left;
 
-          @media (max-width: 768px) {
+          @media (max-width: 968px) {
             align-items: center;
             text-align: center;
           }
@@ -152,7 +149,7 @@ export default function HomeMain() {
                 font-size: clamp(2.4rem, 5vw, 4.2rem);
                 line-height: 1.15;
 
-                @media (max-width: 768px) {
+                @media (max-width: 968px) {
                   align-items: center;
                 }
               `
@@ -166,18 +163,10 @@ export default function HomeMain() {
               h2Css,
               css`
                 font-weight: 400;
-                color: #b3b3b3; /* Slightly dimmed for contrast */
                 opacity: 0;
                 max-width: 580px;
-                font-size: 1rem;
-                line-height: 1.6;
                 margin-top: 1rem;
                 animation: ${fadeInUp} 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
-                
-                @media (min-width: 768px) {
-                  font-size: 1.05rem;
-                  line-height: 1.65;
-                }
               `
             ]}
           >
