@@ -23,7 +23,7 @@ export default function AvatarEye() {
     const container = containerRef.current;
     if (!container) return;
 
-    const MAX = 4; // max px movement in SVG coords
+    const MAX = 2.5; // max px movement — proportional to eye size
 
     const track = (mx: number, my: number) => {
       const rect = container.getBoundingClientRect();
@@ -84,18 +84,18 @@ export default function AvatarEye() {
           const cy = H * eye.yPct;
           return (
             <g key={i} transform={`translate(${cx} ${cy})`}>
-              {/* Cover original green iris with white eye */}
-              <ellipse cx="0" cy="0" rx="16" ry="11" fill="white"/>
-              {/* Black tracking pupil */}
+              {/* Cover original green iris — exact size of eye white */}
+              <ellipse cx="0" cy="0" rx="10" ry="4.5" fill="white"/>
+              {/* Black pupil — sized to fit inside eye white */}
               <circle
                 ref={el => { pupilRefs.current[i] = el; }}
-                cx="0" cy="0" r="6"
+                cx="0" cy="0" r="3.8"
                 fill="#0A0A0A"
               />
-              {/* Highlight */}
+              {/* Tiny highlight */}
               <circle
                 ref={el => { hlRefs.current[i] = el; }}
-                cx="1.8" cy="-1.8" r="1.8"
+                cx="1.2" cy="-1.2" r="1"
                 fill="white" opacity="0.9"
               />
             </g>
