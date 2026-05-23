@@ -3,134 +3,126 @@
 import { useEffect, useRef } from "react";
 
 export default function AvatarEye() {
-  const leftPupilRef = useRef<HTMLDivElement>(null);
-  const rightPupilRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  // Pixel-perfect geometry anchors mapped to your glasses frame lenses
+  const eyeTargets = [
+    { xPercent: 0.443, yPercent: 0.358, radius: 6 }, // Left Eye
+    { xPercent: 0.552, yPercent: 0.358, radius: 6 }  // Right Eye
+  ];
 
   useEffect(() => {
+    const canvas = canvasRef.current;
+    const img = imgRef.current;
+    if (!canvas || !img) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let mouse = { x: 0, y: 0 };
+
     const handleMouseMove = (e: MouseEvent) => {
-      const pupils = [leftPupilRef.current, rightPupilRef.current];
-      
-      pupils.forEach((pupil) => {
-        if (!pupil) return;
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      drawEyes();
+    };
 
-        // Calculate absolute center of each eye socket on the screen
-        const rect = pupil.getBoundingClientRect();
-        const eyeX = rect.left + rect.width / 2;
-        const eyeY = rect.top + rect.height / 2;
+    const resizeCanvas = () => {
+      canvas.width = img.clientWidth;
+      canvas.height = img.clientHeight;
+      drawEyes();
+    };
 
-        // Angle between eye center and the cursor
-        const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
+    const drawEyes = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const rect = canvas.getBoundingClientRect();
 
-        // Natural constraint boundary so the pupil stays inside your glasses frames
-        const maxOffset = 2; 
+      eyeTargets.forEach((target) => {
+        // Calculate the absolute position of the eyes dynamically on screen
+        const eyeX = rect.left + target.xPercent * canvas.width;
+        const eyeY = rect.top + target.yPercent * canvas.height;
+
+        const angle = Math.atan2(mouse.y - eyeY, mouse.x - eyeX);
+        
+        // Keeps the pupil range locked inside the natural eyelids
+        const maxOffset = 2;
         const offsetX = Math.cos(angle) * maxOffset;
         const offsetY = Math.sin(angle) * maxOffset;
 
-        pupil.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        const pupilX = target.xPercent * canvas.width + offsetX;
+        const pupilY = target.yPercent * canvas.height + offsetY;
+
+        // 1. DIGITAL MASK PATCH: Covers up the old flat green pupil lines
+        ctx.beginPath();
+        ctx.arc(target.xPercent * canvas.width, target.yPercent * canvas.height, target.radius + 1, 0, Math.PI * 2);
+        ctx.fillStyle = "#ffffff"; // Sclera White base fill
+        ctx.fill();
+
+        // 2. SEAMLESS REPLACEMENT: Draws your tracking black iris inside
+        ctx.beginPath();
+        ctx.arc(pupilX, pupilY, target.radius - 2, 0, Math.PI * 2);
+        ctx.fillStyle = "#000000"; // Solid black color
+        ctx.fill();
+
+        // 3. REALISM CATCH-LIGHT: Shiny glass reflection dot
+        ctx.beginPath();
+        ctx.arc(pupilX - 1.5, pupilY - 1.5, 1, 0, Math.PI * 2);
+        ctx.fillStyle = "#ffffff";
+        ctx.fill();
       });
     };
 
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    window.addEventListener("resize", resizeCanvas);
+    
+    if (img.complete) {
+      resizeCanvas();
+    } else {
+      img.addEventListener("load", resizeCanvas);
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("resize", resizeCanvas);
+    };
   }, []);
 
   return (
     <div style={{ 
       position: "relative", 
-      width: "195px",   // 🔹 FIXED: Perfectly matches the true 3:4 aspect ratio of your image
-      height: "260px",  // 🔹 FIXED: Removes all black backgrounds, tops, and sides completely
+      width: "195px",   // True 3:4 aspect portrait ratio wrapper layout
+      height: "260px",  // Removes side black bars completely
       display: "inline-block",
       overflow: "hidden",
       borderRadius: "16px"
     }}>
-      {/* 1. THE BASE PORTRAIT */}
+      {/* Base Avatar Asset Frame Layer */}
       <img
+        ref={imgRef}
         src="/images/Avatar-vector.jpeg"
         alt="Interactive Portfolio Avatar"
         style={{ 
-          position: "absolute",
-          top: 0,
-          left: 0,
           width: "100%", 
           height: "100%",
           display: "block",
-          objectFit: "cover", // Fills the container box smoothly with no deformation
-          zIndex: 1,
+          objectFit: "cover", 
           pointerEvents: "none"
         }}
       />
-
-      {/* 2. OVERLAY EYE MASKS (Pixel-aligned directly over your portrait glasses frames) */}
-      
-      {/* Left Eye Box */}
-      <div style={{
-        position: "absolute",
-        top: "33.8%",      // 🔹 LOCKED: Coordinates calibrated perfectly for the native 3:4 image grid
-        left: "40.5%",     // 🔹 LOCKED
-        width: "13px",
-        height: "9px",
-        backgroundColor: "#ffffff",
-        borderRadius: "50%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 2
-      }}>
-        {/* Left Interactive Black Pupil */}
-        <div ref={leftPupilRef} style={{
-          width: "6.5px",
-          height: "6.5px",
-          backgroundColor: "#000000", 
-          borderRadius: "50%",
-          position: "relative"
-        }}>
-          {/* Catch-light highlight glint */}
-          <div style={{
-            position: "absolute",
-            top: "0.5px",
-            left: "0.5px",
-            width: "1.5px",
-            height: "1.5px",
-            backgroundColor: "#ffffff",
-            borderRadius: "50%"
-          }} />
-        </div>
-      </div>
-
-      {/* Right Eye Box */}
-      <div style={{
-        position: "absolute",
-        top: "33.8%",      // 🔹 LOCKED
-        left: "55.0%",     // 🔹 LOCKED
-        width: "13px",
-        height: "9px",
-        backgroundColor: "#ffffff",
-        borderRadius: "50%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 2
-      }}>
-        {/* Right Interactive Black Pupil */}
-        <div ref={rightPupilRef} style={{
-          width: "6.5px",
-          height: "6.5px",
-          backgroundColor: "#000000",
-          borderRadius: "50%",
-          position: "relative"
-        }}>
-          <div style={{
-            position: "absolute",
-            top: "0.5px",
-            left: "0.5px",
-            width: "1.5px",
-            height: "1.5px",
-            backgroundColor: "#ffffff",
-            borderRadius: "50%"
-          }} />
-        </div>
-      </div>
-
+      {/* Realtime Eye Replacement Engine Layer */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+          zIndex: 5
+        }}
+      />
     </div>
   );
 }
