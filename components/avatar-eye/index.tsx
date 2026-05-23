@@ -13,20 +13,19 @@ export default function AvatarEye() {
       pupils.forEach((pupil) => {
         if (!pupil) return;
 
-        // Find the absolute center position of the eye socket on screen
+        // Calculate absolute center of each eye socket on the screen
         const rect = pupil.getBoundingClientRect();
         const eyeX = rect.left + rect.width / 2;
         const eyeY = rect.top + rect.height / 2;
 
-        // Calculate the angle between the eye and the cursor
+        // Angle between eye center and the cursor
         const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
 
-        // Max travel distance in pixels so the pupil stays inside the eye socket boundaries
-        const maxOffset = 3; 
+        // Max look distance in pixels so it stays inside the eye sockets
+        const maxOffset = 2.5; 
         const offsetX = Math.cos(angle) * maxOffset;
         const offsetY = Math.sin(angle) * maxOffset;
 
-        // Smoothly move the pupil element
         pupil.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
       });
     };
@@ -43,30 +42,48 @@ export default function AvatarEye() {
       display: "inline-block",
       overflow: "hidden"
     }}>
-      {/* 1. Background Sclera (White Part of the Eyes) */}
-      {/* These sit exactly behind the frames to mask the pupil movement cleanly */}
+      {/* 1. THE BASE PORTRAIT */}
+      <img
+        src="/images/avatar-vector.png"
+        alt="S. Mohanraj Portfolio Avatar"
+        style={{ 
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%", 
+          height: "100%",
+          display: "block",
+          zIndex: 1,
+          pointerEvents: "none"
+        }}
+      />
+
+      {/* 2. THE DIGITAL EYE MASK PATCHES (Sits at zIndex 2 on top of the old image) */}
+      {/* This draws brand new clean eye whites over the flat painted eyes on your image */}
+      
+      {/* Left Eye Box */}
       <div style={{
         position: "absolute",
-        top: "33.5%",
-        left: "42.5%",
-        width: "16px",
+        top: "33.8%",
+        left: "42.8%",
+        width: "15px",
         height: "10px",
         backgroundColor: "#ffffff",
         borderRadius: "50%",
         display: "flex",
         alignItems: "center",
-        justify-content: center,
-        zIndex: 1
+        justifyContent: "center",
+        zIndex: 2
       }}>
-        {/* Left Moving Pupil */}
+        {/* Left Interactive Green Iris */}
         <div ref={leftPupilRef} style={{
-          width: "7px",
-          height: "7px",
-          backgroundColor: "#2d7d52", // Matches your illustration's green iris tone
+          width: "7.5px",
+          height: "7.5px",
+          backgroundColor: "#2d7d52",
           borderRadius: "50%",
           position: "relative"
         }}>
-          {/* Realism highlight catch-light glint */}
+          {/* Realism highlight dot */}
           <div style={{
             position: "absolute",
             top: "1px",
@@ -79,23 +96,24 @@ export default function AvatarEye() {
         </div>
       </div>
 
+      {/* Right Eye Box */}
       <div style={{
         position: "absolute",
-        top: "33.5%",
+        top: "33.8%",
         left: "53.8%",
-        width: "16px",
+        width: "15px",
         height: "10px",
         backgroundColor: "#ffffff",
         borderRadius: "50%",
         display: "flex",
         alignItems: "center",
-        justify-content: center,
-        zIndex: 1
+        justifyContent: "center",
+        zIndex: 2
       }}>
-        {/* Right Moving Pupil */}
+        {/* Right Interactive Green Iris */}
         <div ref={rightPupilRef} style={{
-          width: "7px",
-          height: "7px",
+          width: "7.5px",
+          height: "7.5px",
           backgroundColor: "#2d7d52",
           borderRadius: "50%",
           position: "relative"
@@ -112,22 +130,6 @@ export default function AvatarEye() {
         </div>
       </div>
 
-      {/* 2. Main Character Foreground Mask Layer */}
-      {/* This image contains your transparent portrait cutout sitting on top */}
-      <img
-        src="/images/avatar-vector.png"
-        alt="S. Mohanraj Portfolio Avatar"
-        style={{ 
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%", 
-          height: "100%",
-          display: "block",
-          zIndex: 2, // Keeps face outlines and glasses layers over the tracking pupils
-          pointerEvents: "none"
-        }}
-      />
     </div>
   );
 }
