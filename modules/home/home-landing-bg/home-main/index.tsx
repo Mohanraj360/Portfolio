@@ -7,6 +7,7 @@ import {
   nameSpanContainerCss
 } from "@/modules/home/home-landing-bg/home-main/styles";
 import { useEffect, useRef } from "react";
+import AvatarEye from "@/components/avatar-eye";
 import { css, keyframes } from "@emotion/react";
 
 // 1. Text Entry Keyframes
@@ -97,6 +98,7 @@ export default function HomeMain() {
 
   return (
     <main css={mainCss} ref={mainRef}>
+      <AvatarEye />
       <h1 
         css={[
           h1WrapperCss,
