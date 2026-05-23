@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 
 export default function AvatarEye() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Exact geometric layout centers calibrated for your vector avatar illustration
+  // Layout center percentages for the vector illustration eyes
   const eyeTargets = [
     { xPercent: 0.452, yPercent: 0.355, radius: 10 }, // Left Eye
     { xPercent: 0.548, yPercent: 0.355, radius: 10 }  // Right Eye
@@ -14,8 +15,8 @@ export default function AvatarEye() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const img = imgRef.current;
-    if (!canvas || !img) return;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -29,8 +30,8 @@ export default function AvatarEye() {
     };
 
     const resizeCanvas = () => {
-      canvas.width = img.clientWidth;
-      canvas.height = img.clientHeight;
+      canvas.width = container.clientWidth;
+      canvas.height = container.clientHeight;
       drawEyes();
     };
 
@@ -39,14 +40,11 @@ export default function AvatarEye() {
       const rect = canvas.getBoundingClientRect();
 
       eyeTargets.forEach((target) => {
-        // Find absolute screen coordinates of the eye centers
         const eyeX = rect.left + target.xPercent * canvas.width;
         const eyeY = rect.top + target.yPercent * canvas.height;
 
-        // Calculate gaze tracking angle
         const angle = Math.atan2(mouse.y - eyeY, mouse.x - eyeX);
 
-        // Movement constraint boundary inside vector sockets
         const maxOffset = 5;
         const offsetX = Math.cos(angle) * maxOffset;
         const offsetY = Math.sin(angle) * maxOffset;
@@ -54,13 +52,13 @@ export default function AvatarEye() {
         const pupilX = target.xPercent * canvas.width + offsetX;
         const pupilY = target.yPercent * canvas.height + offsetY;
 
-        // Render dynamic matching green irises
+        // Draw Iris
         ctx.beginPath();
         ctx.arc(pupilX, pupilY, target.radius, 0, Math.PI * 2);
         ctx.fillStyle = "#2d7d52"; 
         ctx.fill();
 
-        // White reflection gleam dot
+        // Gleam reflection highlight
         ctx.beginPath();
         ctx.arc(pupilX - 3, pupilY - 3, 2, 0, Math.PI * 2);
         ctx.fillStyle = "#ffffff";
@@ -71,26 +69,27 @@ export default function AvatarEye() {
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("resize", resizeCanvas);
     
-    if (img.complete) {
-      resizeCanvas();
-    } else {
-      img.addEventListener("load", resizeCanvas);
-    }
+    // Tiny delay ensures the parent container layout has calculated its dimensions completely
+    const timer = setTimeout(resizeCanvas, 100);
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", resizeCanvas);
-      img.removeEventListener("load", resizeCanvas);
+      clearTimeout(timer);
     };
   }, []);
 
   return (
-    <div style={{ position: "relative", width: "260px", display: "inline-block" }}>
-      <img
-        ref={imgRef}
+    <div ref={containerRef} style={{ position: "relative", width: "260px", height: "260px", display: "inline-block" }}>
+      {/* Next.js Optimized Image Element */}
+      <Image
         src="/avatar-vector.png"
         alt="Interactive Avatar"
-        style={{ width: "100%", display: "block" }}
+        fill
+        sizes="260px"
+        priority
+        style={{ objectFit: "contain" }}
+        unoptimized // Prevents caching mismatches during local changes
       />
       <canvas
         ref={canvasRef}
@@ -101,6 +100,7 @@ export default function AvatarEye() {
           width: "100%",
           height: "100%",
           pointerEvents: "none",
+          z-index: 2
         }}
       />
     </div>
