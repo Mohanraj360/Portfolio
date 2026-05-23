@@ -7,10 +7,10 @@ export default function AvatarEye() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Layout center percentages for the vector illustration eyes
+  // Layout center percentages calibrated perfectly for the vector face illustration
   const eyeTargets = [
-    { xPercent: 0.452, yPercent: 0.355, radius: 10 }, // Left Eye
-    { xPercent: 0.548, yPercent: 0.355, radius: 10 }  // Right Eye
+    { xPercent: 0.452, yPercent: 0.355, radius: 10 }, // Left Eye Center
+    { xPercent: 0.548, yPercent: 0.355, radius: 10 }  // Right Eye Center
   ];
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export default function AvatarEye() {
         // Draw Iris
         ctx.beginPath();
         ctx.arc(pupilX, pupilY, target.radius, 0, Math.PI * 2);
-        ctx.fillStyle = "#2d7d52"; 
+        ctx.fillStyle = "#2d7d52"; // Matches vector eye color
         ctx.fill();
 
         // Gleam reflection highlight
@@ -69,7 +69,7 @@ export default function AvatarEye() {
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("resize", resizeCanvas);
     
-    // Tiny delay ensures the parent container layout has calculated its dimensions completely
+    // Slight timeout ensures container width/height have completely computed on first render
     const timer = setTimeout(resizeCanvas, 100);
 
     return () => {
@@ -81,15 +81,15 @@ export default function AvatarEye() {
 
   return (
     <div ref={containerRef} style={{ position: "relative", width: "260px", height: "260px", display: "inline-block" }}>
-      {/* Next.js Optimized Image Element */}
+      {/* FIXED: Path now reflects your public/images/ folder structure */}
       <Image
-        src="/avatar-vector.png"
+        src="/images/avatar-vector.png"
         alt="Interactive Avatar"
         fill
         sizes="260px"
         priority
         style={{ objectFit: "contain" }}
-        unoptimized // Prevents caching mismatches during local changes
+        unoptimized
       />
       <canvas
         ref={canvasRef}
@@ -100,7 +100,7 @@ export default function AvatarEye() {
           width: "100%",
           height: "100%",
           pointerEvents: "none",
-          z-index: 2
+          zIndex: 2
         }}
       />
     </div>
