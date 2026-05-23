@@ -13,16 +13,16 @@ export default function AvatarEye() {
       pupils.forEach((pupil) => {
         if (!pupil) return;
 
-        // Calculate absolute center of each eye socket on the screen
+        // Get the absolute center of each eye socket on the screen
         const rect = pupil.getBoundingClientRect();
         const eyeX = rect.left + rect.width / 2;
         const eyeY = rect.top + rect.height / 2;
 
-        // Angle between eye center and the cursor
+        // Angle between the eye center and your cursor
         const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
 
-        // Tight look distance boundary to keep it perfectly natural inside the frames
-        const maxOffset = 2.5; 
+        // Keep the movement tight and natural so it stays inside the eye corners
+        const maxOffset = 2; 
         const offsetX = Math.cos(angle) * maxOffset;
         const offsetY = Math.sin(angle) * maxOffset;
 
@@ -37,7 +37,7 @@ export default function AvatarEye() {
   return (
     <div style={{ 
       position: "relative", 
-      width: "195px",   // Fixed to 3:4 aspect ratio to remove side black bars
+      width: "195px",   // True 3:4 portrait crop aspect ratio
       height: "260px",  
       display: "inline-block",
       overflow: "hidden"
@@ -58,15 +58,15 @@ export default function AvatarEye() {
         }}
       />
 
-      {/* 2. OVERLAY EYE MASKS (Sitting precisely over your character's glasses) */}
+      {/* 2. OVERLAY EYE MASKS (Calibrated using strict sub-pixels to cover the old eyes) */}
       
-      {/* Left Eye Mask Container */}
+      {/* Left Eye Sclera Mask */}
       <div style={{
         position: "absolute",
-        top: "34.2%",
-        left: "40.3%",
-        width: "15px",
-        height: "10px",
+        top: "89px",     // Pixel locked to the left lens center
+        left: "83px",    // Pixel locked
+        width: "13px",
+        height: "8px",
         backgroundColor: "#ffffff",
         borderRadius: "50%",
         display: "flex",
@@ -76,32 +76,32 @@ export default function AvatarEye() {
       }}>
         {/* Left Interactive Black Pupil */}
         <div ref={leftPupilRef} style={{
-          width: "7.5px",
-          height: "7.5px",
-          backgroundColor: "#000000", // Updated to clean black color
+          width: "6px",
+          height: "6px",
+          backgroundColor: "#000000", 
           borderRadius: "50%",
           position: "relative"
         }}>
-          {/* Realism reflection gleam dot */}
+          {/* Catch-light highlight glint */}
           <div style={{
             position: "absolute",
             top: "1px",
             left: "1px",
-            width: "2px",
-            height: "2px",
+            width: "1.5px",
+            height: "1.5px",
             backgroundColor: "#ffffff",
             borderRadius: "50%"
           }} />
         </div>
       </div>
 
-      {/* Right Eye Mask Container */}
+      {/* Right Eye Sclera Mask */}
       <div style={{
         position: "absolute",
-        top: "34.2%",
-        left: "55.2%",
-        width: "15px",
-        height: "10px",
+        top: "89px",     // Pixel locked to the right lens center
+        left: "103px",   // Pixel locked
+        width: "13px",
+        height: "8px",
         backgroundColor: "#ffffff",
         borderRadius: "50%",
         display: "flex",
@@ -111,19 +111,18 @@ export default function AvatarEye() {
       }}>
         {/* Right Interactive Black Pupil */}
         <div ref={rightPupilRef} style={{
-          width: "7.5px",
-          height: "7.5px",
-          backgroundColor: "#000000", // Updated to clean black color
+          width: "6px",
+          height: "6px",
+          backgroundColor: "#000000",
           borderRadius: "50%",
           position: "relative"
         }}>
-          {/* Realism reflection gleam dot */}
           <div style={{
             position: "absolute",
             top: "1px",
             left: "1px",
-            width: "2px",
-            height: "2px",
+            width: "1.5px",
+            height: "1.5px",
             backgroundColor: "#ffffff",
             borderRadius: "50%"
           }} />
