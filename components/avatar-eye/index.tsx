@@ -13,7 +13,7 @@ export default function AvatarEye() {
       pupils.forEach((pupil) => {
         if (!pupil) return;
 
-        // Calculate absolute center of each eye socket on the screen
+        // Calculate the absolute center of each eye socket on the screen
         const rect = pupil.getBoundingClientRect();
         const eyeX = rect.left + rect.width / 2;
         const eyeY = rect.top + rect.height / 2;
@@ -21,8 +21,8 @@ export default function AvatarEye() {
         // Angle between eye center and the cursor
         const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
 
-        // Tight look distance boundary to keep it perfectly natural inside the frames
-        const maxOffset = 2.5; 
+        // Natural constraint boundary so the pupil stays inside the eye socket
+        const maxOffset = 2; 
         const offsetX = Math.cos(angle) * maxOffset;
         const offsetY = Math.sin(angle) * maxOffset;
 
@@ -41,8 +41,8 @@ export default function AvatarEye() {
       height: "260px", 
       display: "inline-block",
       overflow: "hidden",
-      backgroundColor: "#000000",   // 🔹 Seamlessly blends your portrait background with the portfolio canvas dark theme
-      borderRadius: "12px"          // Smooths out corners gently
+      backgroundColor: "#000000",   // Blends the image borders cleanly with your dark theme background
+      borderRadius: "16px"
     }}>
       {/* 1. THE BASE PORTRAIT */}
       <img
@@ -55,21 +55,21 @@ export default function AvatarEye() {
           width: "100%", 
           height: "100%",
           display: "block",
-          objectFit: "contain",     // Keeps layout proportions 100% correct so eyes never warp
+          objectFit: "contain", 
           zIndex: 1,
           pointerEvents: "none"
         }}
       />
 
-      {/* 2. OVERLAY EYE MASKS (Sitting precisely on top of the original graphic) */}
+      {/* 2. OVERLAY EYE MASKS (Calibrated perfectly to cover the original eyes) */}
       
-      {/* Left Eye Mask Container */}
+      {/* Left Eye Box */}
       <div style={{
         position: "absolute",
-        top: "33.8%",
-        left: "42.8%",
-        width: "15px",
-        height: "10px",
+        top: "23.5%",      // 🔹 Adjusted vertically up to move it out of the beard area
+        left: "44.5%",     // 🔹 Re-aligned horizontally with the lens center
+        width: "14px",
+        height: "9px",
         backgroundColor: "#ffffff",
         borderRadius: "50%",
         display: "flex",
@@ -79,8 +79,8 @@ export default function AvatarEye() {
       }}>
         {/* Left Interactive Black Pupil */}
         <div ref={leftPupilRef} style={{
-          width: "7.5px",
-          height: "7.5px",
+          width: "6.5px",
+          height: "6.5px",
           backgroundColor: "#000000", 
           borderRadius: "50%",
           position: "relative"
@@ -88,23 +88,23 @@ export default function AvatarEye() {
           {/* Realism highlight dot */}
           <div style={{
             position: "absolute",
-            top: "1px",
-            left: "1px",
-            width: "2px",
-            height: "2px",
+            top: "0.5px",
+            left: "0.5px",
+            width: "1.5px",
+            height: "1.5px",
             backgroundColor: "#ffffff",
             borderRadius: "50%"
           }} />
         </div>
       </div>
 
-      {/* Right Eye Mask Container */}
+      {/* Right Eye Box */}
       <div style={{
         position: "absolute",
-        top: "33.8%",
-        left: "53.8%",
-        width: "15px",
-        height: "10px",
+        top: "23.5%",      // 🔹 Adjusted vertically up
+        left: "54.2%",     // 🔹 Re-aligned horizontally with the lens center
+        width: "14px",
+        height: "9px",
         backgroundColor: "#ffffff",
         borderRadius: "50%",
         display: "flex",
@@ -114,8 +114,8 @@ export default function AvatarEye() {
       }}>
         {/* Right Interactive Black Pupil */}
         <div ref={rightPupilRef} style={{
-          width: "7.5px",
-          height: "7.5px",
+          width: "6.5px",
+          height: "6.5px",
           backgroundColor: "#000000",
           borderRadius: "50%",
           position: "relative"
@@ -123,10 +123,10 @@ export default function AvatarEye() {
           {/* Realism highlight dot */}
           <div style={{
             position: "absolute",
-            top: "1px",
-            left: "1px",
-            width: "2px",
-            height: "2px",
+            top: "0.5px",
+            left: "0.5px",
+            width: "1.5px",
+            height: "1.5px",
             backgroundColor: "#ffffff",
             borderRadius: "50%"
           }} />
