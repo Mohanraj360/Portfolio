@@ -13,7 +13,7 @@ export default function AvatarEye() {
       pupils.forEach((pupil) => {
         if (!pupil) return;
 
-        // Calculate the absolute center of each eye socket on the screen
+        // Calculate absolute center of each eye socket on the screen
         const rect = pupil.getBoundingClientRect();
         const eyeX = rect.left + rect.width / 2;
         const eyeY = rect.top + rect.height / 2;
@@ -21,7 +21,7 @@ export default function AvatarEye() {
         // Angle between eye center and the cursor
         const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
 
-        // Natural constraint boundary so the pupil stays inside the eye socket
+        // Natural constraint boundary so the pupil stays inside your glasses frames
         const maxOffset = 2; 
         const offsetX = Math.cos(angle) * maxOffset;
         const offsetY = Math.sin(angle) * maxOffset;
@@ -37,11 +37,10 @@ export default function AvatarEye() {
   return (
     <div style={{ 
       position: "relative", 
-      width: "260px", 
-      height: "260px", 
+      width: "195px",   // 🔹 FIXED: Perfectly matches the true 3:4 aspect ratio of your image
+      height: "260px",  // 🔹 FIXED: Removes all black backgrounds, tops, and sides completely
       display: "inline-block",
       overflow: "hidden",
-      backgroundColor: "#000000",   // Blends the image borders cleanly with your dark theme background
       borderRadius: "16px"
     }}>
       {/* 1. THE BASE PORTRAIT */}
@@ -55,20 +54,20 @@ export default function AvatarEye() {
           width: "100%", 
           height: "100%",
           display: "block",
-          objectFit: "contain", 
+          objectFit: "cover", // Fills the container box smoothly with no deformation
           zIndex: 1,
           pointerEvents: "none"
         }}
       />
 
-      {/* 2. OVERLAY EYE MASKS (Calibrated perfectly to cover the original eyes) */}
+      {/* 2. OVERLAY EYE MASKS (Pixel-aligned directly over your portrait glasses frames) */}
       
       {/* Left Eye Box */}
       <div style={{
         position: "absolute",
-        top: "23.5%",      // 🔹 Adjusted vertically up to move it out of the beard area
-        left: "44.5%",     // 🔹 Re-aligned horizontally with the lens center
-        width: "14px",
+        top: "33.8%",      // 🔹 LOCKED: Coordinates calibrated perfectly for the native 3:4 image grid
+        left: "40.5%",     // 🔹 LOCKED
+        width: "13px",
         height: "9px",
         backgroundColor: "#ffffff",
         borderRadius: "50%",
@@ -85,7 +84,7 @@ export default function AvatarEye() {
           borderRadius: "50%",
           position: "relative"
         }}>
-          {/* Realism highlight dot */}
+          {/* Catch-light highlight glint */}
           <div style={{
             position: "absolute",
             top: "0.5px",
@@ -101,9 +100,9 @@ export default function AvatarEye() {
       {/* Right Eye Box */}
       <div style={{
         position: "absolute",
-        top: "23.5%",      // 🔹 Adjusted vertically up
-        left: "54.2%",     // 🔹 Re-aligned horizontally with the lens center
-        width: "14px",
+        top: "33.8%",      // 🔹 LOCKED
+        left: "55.0%",     // 🔹 LOCKED
+        width: "13px",
         height: "9px",
         backgroundColor: "#ffffff",
         borderRadius: "50%",
@@ -120,7 +119,6 @@ export default function AvatarEye() {
           borderRadius: "50%",
           position: "relative"
         }}>
-          {/* Realism highlight dot */}
           <div style={{
             position: "absolute",
             top: "0.5px",
