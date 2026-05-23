@@ -22,7 +22,7 @@ export default function AvatarEye() {
         const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
 
         // Tight look distance boundary to keep it perfectly natural inside the frames
-        const maxOffset = 2.5; 
+        const maxOffset = 2.0; 
         const offsetX = Math.cos(angle) * maxOffset;
         const offsetY = Math.sin(angle) * maxOffset;
 
@@ -54,21 +54,21 @@ export default function AvatarEye() {
           width: "100%", 
           height: "100%",
           display: "block",
-          objectFit: "fill", // Removes side black bars completely by filling the square box
+          objectFit: "cover", // 🔹 Keeps original facial proportions unwarped while filling the box
           zIndex: 1,
           pointerEvents: "none"
         }}
       />
 
-      {/* 2. OVERLAY EYE MASKS (Sitting precisely on top of the original graphic) */}
+      {/* 2. OVERLAY EYE MASKS (Calibrated precisely for the unwarped cover layout) */}
       
       {/* Left Eye Mask Container */}
       <div style={{
         position: "absolute",
-        top: "33.8%",
-        left: "42.8%",
-        width: "15px",
-        height: "10px",
+        top: "35.8%",       // 🔹 Precise vertical position over your glasses lens
+        left: "44.3%",      // 🔹 Precise horizontal position
+        width: "13px",
+        height: "9px",
         backgroundColor: "#ffffff",
         borderRadius: "50%",
         display: "flex",
@@ -78,8 +78,8 @@ export default function AvatarEye() {
       }}>
         {/* Left Interactive Black Pupil */}
         <div ref={leftPupilRef} style={{
-          width: "7.5px",
-          height: "7.5px",
+          width: "6.5px",
+          height: "6.5px",
           backgroundColor: "#000000", 
           borderRadius: "50%",
           position: "relative"
@@ -87,10 +87,10 @@ export default function AvatarEye() {
           {/* Realism highlight dot */}
           <div style={{
             position: "absolute",
-            top: "1px",
-            left: "1px",
-            width: "2px",
-            height: "2px",
+            top: "0.5px",
+            left: "0.5px",
+            width: "1.5px",
+            height: "1.5px",
             backgroundColor: "#ffffff",
             borderRadius: "50%"
           }} />
@@ -100,10 +100,10 @@ export default function AvatarEye() {
       {/* Right Eye Mask Container */}
       <div style={{
         position: "absolute",
-        top: "33.8%",
-        left: "53.8%",
-        width: "15px",
-        height: "10px",
+        top: "35.8%",       // 🔹 Precise vertical position
+        left: "54.2%",      // 🔹 Precise horizontal position
+        width: "13px",
+        height: "9px",
         backgroundColor: "#ffffff",
         borderRadius: "50%",
         display: "flex",
@@ -113,19 +113,18 @@ export default function AvatarEye() {
       }}>
         {/* Right Interactive Black Pupil */}
         <div ref={rightPupilRef} style={{
-          width: "7.5px",
-          height: "7.5px",
+          width: "6.5px",
+          height: "6.5px",
           backgroundColor: "#000000",
           borderRadius: "50%",
           position: "relative"
         }}>
-          {/* Realism highlight dot */}
           <div style={{
             position: "absolute",
-            top: "1px",
-            left: "1px",
-            width: "2px",
-            height: "2px",
+            top: "0.5px",
+            left: "0.5px",
+            width: "1.5px",
+            height: "1.5px",
             backgroundColor: "#ffffff",
             borderRadius: "50%"
           }} />
