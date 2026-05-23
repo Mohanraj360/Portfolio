@@ -119,8 +119,18 @@ export default function HomeMain() {
         
         {/* Left Side Layer: Moving Avatar */}
         <div css={css`
-          flex-shrink: 0;
+          flex: 1;
           z-index: 5;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 300px;
+          
+          @media (max-width: 968px) {
+            min-width: auto;
+            width: 100%;
+            max-width: 440px;
+          }
         `}>
           <AvatarEye />
         </div>
