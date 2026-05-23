@@ -81,7 +81,7 @@ export default function HeroIntro() {
             letterSpacing: "-2px",
             fontFamily: "'Outfit', 'Space Grotesk', system-ui, sans-serif",
           }}>
-            I'm <br />
+            I&apos;m <br />
             <span style={{
               display: "inline-block",
               animation: isVisible ? "slideIn 1s ease-out 0.3s both" : "none",

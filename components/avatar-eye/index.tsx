@@ -65,7 +65,7 @@ export default function AvatarEye() {
       window.removeEventListener("mousemove", onMouse);
       window.removeEventListener("touchmove", onTouch);
     };
-  }, []);
+  }, [pupilRefs]);
 
   return (
     <div
