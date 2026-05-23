@@ -3,126 +3,135 @@
 import { useEffect, useRef } from "react";
 
 export default function AvatarEye() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
-
-  // Re-calibrated center coordinates specifically for when the image is cropped via object-fit cover
-  const eyeTargets = [
-    { xPercent: 0.445, yPercent: 0.358, radius: 6 }, // Left Eye
-    { xPercent: 0.552, yPercent: 0.358, radius: 6 }  // Right Eye
-  ];
+  const leftPupilRef = useRef<HTMLDivElement>(null);
+  const rightPupilRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const img = imgRef.current;
-    if (!canvas || !img) return;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let mouse = { x: 0, y: 0 };
-
     const handleMouseMove = (e: MouseEvent) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-      drawEyes();
-    };
+      const pupils = [leftPupilRef.current, rightPupilRef.current];
+      
+      pupils.forEach((pupil) => {
+        if (!pupil) return;
 
-    const resizeCanvas = () => {
-      canvas.width = img.clientWidth;
-      canvas.height = img.clientHeight;
-      drawEyes();
-    };
+        // Calculate the absolute center of each eye socket on the screen
+        const rect = pupil.getBoundingClientRect();
+        const eyeX = rect.left + rect.width / 2;
+        const eyeY = rect.top + rect.height / 2;
 
-    const drawEyes = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const rect = canvas.getBoundingClientRect();
+        // Angle between eye center and the cursor
+        const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
 
-      eyeTargets.forEach((target) => {
-        // Dynamic absolute scaling coordinates
-        const eyeX = rect.left + target.xPercent * canvas.width;
-        const eyeY = rect.top + target.yPercent * canvas.height;
-
-        const angle = Math.atan2(mouse.y - eyeY, mouse.x - eyeX);
-        
-        // Small constraint range so it rotates entirely within your glasses rims
-        const maxOffset = 2;
+        // Very tight boundary constraint so the pupil stays strictly inside the socket
+        const maxOffset = 2; 
         const offsetX = Math.cos(angle) * maxOffset;
         const offsetY = Math.sin(angle) * maxOffset;
 
-        const pupilX = target.xPercent * canvas.width + offsetX;
-        const pupilY = target.yPercent * canvas.height + offsetY;
-
-        // 1. Draw crisp white backplate over the old graphic's eyes
-        ctx.beginPath();
-        ctx.arc(target.xPercent * canvas.width, target.yPercent * canvas.height, target.radius + 1, 0, Math.PI * 2);
-        ctx.fillStyle = "#ffffff";
-        ctx.fill();
-
-        // 2. Draw the tracking black pupil
-        ctx.beginPath();
-        ctx.arc(pupilX, pupilY, target.radius - 2, 0, Math.PI * 2);
-        ctx.fillStyle = "#000000";
-        ctx.fill();
-
-        // 3. Highlight reflection dot
-        ctx.beginPath();
-        ctx.arc(pupilX - 1.5, pupilY - 1.5, 1, 0, Math.PI * 2);
-        ctx.fillStyle = "#ffffff";
-        ctx.fill();
+        pupil.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
       });
     };
 
     window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("resize", resizeCanvas);
-    
-    if (img.complete) {
-      resizeCanvas();
-    } else {
-      img.addEventListener("load", resizeCanvas);
-    }
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("resize", resizeCanvas);
-    };
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   return (
-    <div 
-      style={{ 
-        position: "relative", 
-        width: "240px",       
-        height: "240px",      
-        display: "inline-block",
-        overflow: "hidden",
-        borderRadius: "50%"  // Optional: makes the avatar a clean circular badge, or remove for square
-      }}
-    >
+    <div style={{ 
+      position: "relative", 
+      width: "260px",   // Back to a standard perfect square container
+      height: "260px",  
+      display: "inline-block",
+      overflow: "hidden",
+      borderRadius: "16px" // Gives the avatar smooth rounded corners
+    }}>
+      {/* 1. THE BASE PORTRAIT */}
       <img
-        ref={imgRef}
         src="/images/Avatar-vector.jpeg"
         alt="Interactive Portfolio Avatar"
         style={{ 
-          width: "100%", 
-          height: "100%",
-          display: "block",
-          objectFit: "cover", 
-          pointerEvents: "none"
-        }}
-      />
-      <canvas
-        ref={canvasRef}
-        style={{
           position: "absolute",
           top: 0,
           left: 0,
-          width: "100%",
+          width: "100%", 
           height: "100%",
-          pointerEvents: "none",
-          zIndex: 5
+          display: "block",
+          objectFit: "fill", // 🔹 Forces the image to exactly fill the 260x260 container box with NO black sides
+          zIndex: 1,
+          pointerEvents: "none"
         }}
       />
+
+      {/* 2. OVERLAY EYE MASKS */}
+      {/* These sit at zIndex: 2, perfectly matching the un-cropped 260x260 image dimensions */}
+      
+      {/* Left Eye Box */}
+      <div style={{
+        position: "absolute",
+        top: "35.2%",
+        left: "44.3%",
+        width: "14px",
+        height: "9px",
+        backgroundColor: "#ffffff",
+        borderRadius: "50%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 2
+      }}>
+        {/* Left Tracking Pupil */}
+        <div ref={leftPupilRef} style={{
+          width: "6px",
+          height: "6px",
+          backgroundColor: "#000000", 
+          borderRadius: "50%",
+          position: "relative"
+        }}>
+          {/* Subtle reflection glint */}
+          <div style={{
+            position: "absolute",
+            top: "0.5px",
+            left: "0.5px",
+            width: "1.5px",
+            height: "1.5px",
+            backgroundColor: "#ffffff",
+            borderRadius: "50%"
+          }} />
+        </div>
+      </div>
+
+      {/* Right Eye Box */}
+      <div style={{
+        position: "absolute",
+        top: "35.2%",
+        left: "54.2%",
+        width: "14px",
+        height: "9px",
+        backgroundColor: "#ffffff",
+        borderRadius: "50%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 2
+      }}>
+        {/* Right Tracking Pupil */}
+        <div ref={rightPupilRef} style={{
+          width: "6px",
+          height: "6px",
+          backgroundColor: "#000000",
+          borderRadius: "50%",
+          position: "relative"
+        }}>
+          <div style={{
+            position: "absolute",
+            top: "0.5px",
+            left: "0.5px",
+            width: "1.5px",
+            height: "1.5px",
+            backgroundColor: "#ffffff",
+            borderRadius: "50%"
+          }} />
+        </div>
+      </div>
+
     </div>
   );
 }
