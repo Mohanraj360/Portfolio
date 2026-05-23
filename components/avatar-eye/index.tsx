@@ -13,7 +13,7 @@ export default function AvatarEye() {
       pupils.forEach((pupil) => {
         if (!pupil) return;
 
-        // Calculate the absolute center of each eye socket on the screen
+        // Calculate absolute center of each eye socket on the screen
         const rect = pupil.getBoundingClientRect();
         const eyeX = rect.left + rect.width / 2;
         const eyeY = rect.top + rect.height / 2;
@@ -21,7 +21,7 @@ export default function AvatarEye() {
         // Angle between eye center and the cursor
         const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
 
-        // Natural constraint boundary so the pupil stays inside the eye socket
+        // Tight look distance boundary to keep it perfectly natural inside the frames
         const maxOffset = 2.5; 
         const offsetX = Math.cos(angle) * maxOffset;
         const offsetY = Math.sin(angle) * maxOffset;
@@ -37,11 +37,12 @@ export default function AvatarEye() {
   return (
     <div style={{ 
       position: "relative", 
-      width: "260px",   // Locked square container box
-      height: "260px",  
+      width: "260px", 
+      height: "260px", 
       display: "inline-block",
       overflow: "hidden",
-      borderRadius: "16px"
+      backgroundColor: "#000000",   // 🔹 Seamlessly blends your portrait background with the portfolio canvas dark theme
+      borderRadius: "12px"          // Smooths out corners gently
     }}>
       {/* 1. THE BASE PORTRAIT */}
       <img
@@ -54,80 +55,78 @@ export default function AvatarEye() {
           width: "100%", 
           height: "100%",
           display: "block",
-          objectFit: "fill", 
+          objectFit: "contain",     // Keeps layout proportions 100% correct so eyes never warp
           zIndex: 1,
           pointerEvents: "none"
         }}
       />
 
-      {/* 2. PIXEL-LOCKED NATURAL EYE REPLACEMENTS */}
-      {/* This creates custom eye frames that sit perfectly over the original graphic, seamlessly blending in */}
+      {/* 2. OVERLAY EYE MASKS (Sitting precisely on top of the original graphic) */}
       
-      {/* Left Eye Socket */}
+      {/* Left Eye Mask Container */}
       <div style={{
         position: "absolute",
-        top: "92px",      // Fixed position matching your glasses frames exactly
-        left: "115px",    
-        width: "14px",
-        height: "10px",
-        backgroundColor: "#ffffff", // Pure matching eye white sclera
-        borderRadius: "50%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 2,
-        overflow: "hidden" // Keeps the pupil strictly cut off at the eyelids
-      }}>
-        {/* Left Interactive Black Pupil */}
-        <div ref={leftPupilRef} style={{
-          width: "6.5px",
-          height: "6.5px",
-          backgroundColor: "#000000", 
-          borderRadius: "50%",
-          position: "relative"
-        }}>
-          {/* Realism catch-light reflection glint */}
-          <div style={{
-            position: "absolute",
-            top: "0.5px",
-            left: "0.5px",
-            width: "1.5px",
-            height: "1.5px",
-            backgroundColor: "#ffffff",
-            borderRadius: "50%"
-          }} />
-        </div>
-      </div>
-
-      {/* Right Eye Socket */}
-      <div style={{
-        position: "absolute",
-        top: "92px",
-        left: "141px",    // Fixed position matching your glasses frames exactly
-        width: "14px",
+        top: "33.8%",
+        left: "42.8%",
+        width: "15px",
         height: "10px",
         backgroundColor: "#ffffff",
         borderRadius: "50%",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        zIndex: 2,
-        overflow: "hidden"
+        zIndex: 2
+      }}>
+        {/* Left Interactive Black Pupil */}
+        <div ref={leftPupilRef} style={{
+          width: "7.5px",
+          height: "7.5px",
+          backgroundColor: "#000000", 
+          borderRadius: "50%",
+          position: "relative"
+        }}>
+          {/* Realism highlight dot */}
+          <div style={{
+            position: "absolute",
+            top: "1px",
+            left: "1px",
+            width: "2px",
+            height: "2px",
+            backgroundColor: "#ffffff",
+            borderRadius: "50%"
+          }} />
+        </div>
+      </div>
+
+      {/* Right Eye Mask Container */}
+      <div style={{
+        position: "absolute",
+        top: "33.8%",
+        left: "53.8%",
+        width: "15px",
+        height: "10px",
+        backgroundColor: "#ffffff",
+        borderRadius: "50%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 2
       }}>
         {/* Right Interactive Black Pupil */}
         <div ref={rightPupilRef} style={{
-          width: "6.5px",
-          height: "6.5px",
+          width: "7.5px",
+          height: "7.5px",
           backgroundColor: "#000000",
           borderRadius: "50%",
           position: "relative"
         }}>
+          {/* Realism highlight dot */}
           <div style={{
             position: "absolute",
-            top: "0.5px",
-            left: "0.5px",
-            width: "1.5px",
-            height: "1.5px",
+            top: "1px",
+            left: "1px",
+            width: "2px",
+            height: "2px",
             backgroundColor: "#ffffff",
             borderRadius: "50%"
           }} />
