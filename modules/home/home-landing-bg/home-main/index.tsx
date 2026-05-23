@@ -85,7 +85,6 @@ export default function HomeMain() {
           css`
             display: block;
             font-size: 0.85em;
-            /* FIXED: Evaluates properly via interpolation template now */
             color: ${isDataAnalyst ? '#38bdf8' : '#ffffff'};
             opacity: 0;
             animation: ${fadeInUp} 1s cubic-bezier(0.16, 1, 0.3, 1) ${0.15 * index}s forwards;
@@ -99,49 +98,94 @@ export default function HomeMain() {
 
   return (
     <main css={mainCss} ref={mainRef}>
-      <AvatarEye />
-      <h1 
-        css={[
-          h1WrapperCss,
-          css`
-            display: flex;
-            flex-direction: column;
+      
+      {/* NEW SIDE-BY-SIDE FLEX CONTAINER */}
+      <div css={css`
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 3rem;
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+
+        /* Standard mobile fallback: stacks avatar on top if screen is narrow */
+        @media (max-width: 768px) {
+          flex-direction: column;
+          gap: 1.5rem;
+          text-align: center;
+        }
+      `}>
+        
+        {/* Left Hand Side: Avatar Box */}
+        <div css={css`
+          flex-shrink: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        `}>
+          <AvatarEye />
+        </div>
+
+        {/* Right Hand Side: Content Text Box */}
+        <div css={css`
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          text-align: left;
+
+          @media (max-width: 768px) {
             align-items: center;
             text-align: center;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            font-size: clamp(2.4rem, 6vw, 4.8rem);
-            line-height: 1.15;
-          `
-        ]}
-      >
-        {h1Contents.map(h1Mapper)}
-      </h1>
-      
-      <h2 
-        css={[
-          h2Css,
-          css`
-            text-align: center;
-            font-weight: 400;
-            color: #ffffff;
-            opacity: 0;
-            max-width: 640px;
-            width: 88%;
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-top: 0.5rem;
-            animation: ${fadeInUp} 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
-            
-            @media (min-width: 768px) {
-              font-size: 1.125rem;
-              line-height: 1.7;
-            }
-          `
-        ]}
-      >
-        {h2Text}
-      </h2>
+          }
+        `}>
+          <h1 
+            css={[
+              h1WrapperCss,
+              css`
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                font-weight: 800;
+                letter-spacing: -0.02em;
+                font-size: clamp(2.4rem, 5vw, 4.2rem);
+                line-height: 1.15;
+
+                @media (max-width: 768px) {
+                  align-items: center;
+                }
+              `
+            ]}
+          >
+            {h1Contents.map(h1Mapper)}
+          </h1>
+          
+          <h2 
+            css={[
+              h2Css,
+              css`
+                font-weight: 400;
+                color: #b3b3b3; /* Slightly dimmed for contrast */
+                opacity: 0;
+                max-width: 580px;
+                font-size: 1rem;
+                line-height: 1.6;
+                margin-top: 1rem;
+                animation: ${fadeInUp} 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+                
+                @media (min-width: 768px) {
+                  font-size: 1.05rem;
+                  line-height: 1.65;
+                }
+              `
+            ]}
+          >
+            {h2Text}
+          </h2>
+        </div>
+
+      </div>
     </main>
   );
 }
