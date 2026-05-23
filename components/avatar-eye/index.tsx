@@ -37,8 +37,8 @@ export default function AvatarEye() {
   return (
     <div style={{ 
       position: "relative", 
-      width: "260px", 
-      height: "260px", 
+      width: "195px",   // Fixed to 3:4 aspect ratio to remove side black bars
+      height: "260px",  
       display: "inline-block",
       overflow: "hidden"
     }}>
@@ -58,13 +58,13 @@ export default function AvatarEye() {
         }}
       />
 
-      {/* 2. OVERLAY EYE MASKS (Sitting precisely on top of the original graphic) */}
+      {/* 2. OVERLAY EYE MASKS (Sitting precisely over your character's glasses) */}
       
       {/* Left Eye Mask Container */}
       <div style={{
         position: "absolute",
-        top: "33.8%",
-        left: "42.8%",
+        top: "34.2%",
+        left: "40.3%",
         width: "15px",
         height: "10px",
         backgroundColor: "#ffffff",
@@ -78,11 +78,11 @@ export default function AvatarEye() {
         <div ref={leftPupilRef} style={{
           width: "7.5px",
           height: "7.5px",
-          backgroundColor: "#000000", 
+          backgroundColor: "#000000", // Updated to clean black color
           borderRadius: "50%",
           position: "relative"
         }}>
-          {/* Realism highlight dot */}
+          {/* Realism reflection gleam dot */}
           <div style={{
             position: "absolute",
             top: "1px",
@@ -98,8 +98,8 @@ export default function AvatarEye() {
       {/* Right Eye Mask Container */}
       <div style={{
         position: "absolute",
-        top: "33.8%",
-        left: "53.8%",
+        top: "34.2%",
+        left: "55.2%",
         width: "15px",
         height: "10px",
         backgroundColor: "#ffffff",
@@ -113,11 +113,11 @@ export default function AvatarEye() {
         <div ref={rightPupilRef} style={{
           width: "7.5px",
           height: "7.5px",
-          backgroundColor: "#000000",
+          backgroundColor: "#000000", // Updated to clean black color
           borderRadius: "50%",
           position: "relative"
         }}>
-          {/* Realism highlight dot */}
+          {/* Realism reflection gleam dot */}
           <div style={{
             position: "absolute",
             top: "1px",
