@@ -21,7 +21,7 @@ export default function AvatarEye() {
         // Angle between eye center and the cursor
         const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
 
-        // Max look distance in pixels so it stays inside the eye sockets
+        // Tight look distance boundary to keep it perfectly natural inside the frames
         const maxOffset = 2.5; 
         const offsetX = Math.cos(angle) * maxOffset;
         const offsetY = Math.sin(angle) * maxOffset;
@@ -44,8 +44,8 @@ export default function AvatarEye() {
     }}>
       {/* 1. THE BASE PORTRAIT */}
       <img
-        src="/images/avatar-vector.png"
-        alt="S. Mohanraj Portfolio Avatar"
+        src="/images/Avatar-vector.jpeg"
+        alt="Interactive Portfolio Avatar"
         style={{ 
           position: "absolute",
           top: 0,
@@ -58,10 +58,9 @@ export default function AvatarEye() {
         }}
       />
 
-      {/* 2. THE DIGITAL EYE MASK PATCHES (Sits at zIndex 2 on top of the old image) */}
-      {/* This draws brand new clean eye whites over the flat painted eyes on your image */}
+      {/* 2. OVERLAY EYE MASKS (Sitting precisely on top of the original graphic) */}
       
-      {/* Left Eye Box */}
+      {/* Left Eye Mask Container */}
       <div style={{
         position: "absolute",
         top: "33.8%",
@@ -75,11 +74,11 @@ export default function AvatarEye() {
         justifyContent: "center",
         zIndex: 2
       }}>
-        {/* Left Interactive Green Iris */}
+        {/* Left Interactive Black Pupil */}
         <div ref={leftPupilRef} style={{
           width: "7.5px",
           height: "7.5px",
-          backgroundColor: "#2d7d52",
+          backgroundColor: "#000000", 
           borderRadius: "50%",
           position: "relative"
         }}>
@@ -96,7 +95,7 @@ export default function AvatarEye() {
         </div>
       </div>
 
-      {/* Right Eye Box */}
+      {/* Right Eye Mask Container */}
       <div style={{
         position: "absolute",
         top: "33.8%",
@@ -110,14 +109,15 @@ export default function AvatarEye() {
         justifyContent: "center",
         zIndex: 2
       }}>
-        {/* Right Interactive Green Iris */}
+        {/* Right Interactive Black Pupil */}
         <div ref={rightPupilRef} style={{
           width: "7.5px",
           height: "7.5px",
-          backgroundColor: "#2d7d52",
+          backgroundColor: "#000000",
           borderRadius: "50%",
           position: "relative"
         }}>
+          {/* Realism highlight dot */}
           <div style={{
             position: "absolute",
             top: "1px",
