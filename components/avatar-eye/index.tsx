@@ -21,8 +21,8 @@ export default function AvatarEye() {
         // Angle between eye center and the cursor
         const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
 
-        // Very tight boundary constraint so the pupil stays strictly inside the socket
-        const maxOffset = 2; 
+        // Natural constraint boundary so the pupil stays inside the eye socket
+        const maxOffset = 2.5; 
         const offsetX = Math.cos(angle) * maxOffset;
         const offsetY = Math.sin(angle) * maxOffset;
 
@@ -37,11 +37,11 @@ export default function AvatarEye() {
   return (
     <div style={{ 
       position: "relative", 
-      width: "260px",   // Back to a standard perfect square container
+      width: "260px",   // Locked square container box
       height: "260px",  
       display: "inline-block",
       overflow: "hidden",
-      borderRadius: "16px" // Gives the avatar smooth rounded corners
+      borderRadius: "16px"
     }}>
       {/* 1. THE BASE PORTRAIT */}
       <img
@@ -54,38 +54,39 @@ export default function AvatarEye() {
           width: "100%", 
           height: "100%",
           display: "block",
-          objectFit: "fill", // 🔹 Forces the image to exactly fill the 260x260 container box with NO black sides
+          objectFit: "fill", 
           zIndex: 1,
           pointerEvents: "none"
         }}
       />
 
-      {/* 2. OVERLAY EYE MASKS */}
-      {/* These sit at zIndex: 2, perfectly matching the un-cropped 260x260 image dimensions */}
+      {/* 2. PIXEL-LOCKED NATURAL EYE REPLACEMENTS */}
+      {/* This creates custom eye frames that sit perfectly over the original graphic, seamlessly blending in */}
       
-      {/* Left Eye Box */}
+      {/* Left Eye Socket */}
       <div style={{
         position: "absolute",
-        top: "35.2%",
-        left: "44.3%",
+        top: "92px",      // Fixed position matching your glasses frames exactly
+        left: "115px",    
         width: "14px",
-        height: "9px",
-        backgroundColor: "#ffffff",
+        height: "10px",
+        backgroundColor: "#ffffff", // Pure matching eye white sclera
         borderRadius: "50%",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        zIndex: 2
+        zIndex: 2,
+        overflow: "hidden" // Keeps the pupil strictly cut off at the eyelids
       }}>
-        {/* Left Tracking Pupil */}
+        {/* Left Interactive Black Pupil */}
         <div ref={leftPupilRef} style={{
-          width: "6px",
-          height: "6px",
+          width: "6.5px",
+          height: "6.5px",
           backgroundColor: "#000000", 
           borderRadius: "50%",
           position: "relative"
         }}>
-          {/* Subtle reflection glint */}
+          {/* Realism catch-light reflection glint */}
           <div style={{
             position: "absolute",
             top: "0.5px",
@@ -98,24 +99,25 @@ export default function AvatarEye() {
         </div>
       </div>
 
-      {/* Right Eye Box */}
+      {/* Right Eye Socket */}
       <div style={{
         position: "absolute",
-        top: "35.2%",
-        left: "54.2%",
+        top: "92px",
+        left: "141px",    // Fixed position matching your glasses frames exactly
         width: "14px",
-        height: "9px",
+        height: "10px",
         backgroundColor: "#ffffff",
         borderRadius: "50%",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        zIndex: 2
+        zIndex: 2,
+        overflow: "hidden"
       }}>
-        {/* Right Tracking Pupil */}
+        {/* Right Interactive Black Pupil */}
         <div ref={rightPupilRef} style={{
-          width: "6px",
-          height: "6px",
+          width: "6.5px",
+          height: "6.5px",
           backgroundColor: "#000000",
           borderRadius: "50%",
           position: "relative"
