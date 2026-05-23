@@ -9,8 +9,8 @@ const PUPIL_SIZE = 3.8;
 const MAX_OFFSET = 2.5;
 
 const EYES = [
-  { topPct: 35.8, leftPct: 44.3 }, // Left lens
-  { topPct: 35.8, leftPct: 55.2 }, // Right lens
+  { topPct: 35.5, leftPct: 44.0 }, // Left lens - perfectly centered
+  { topPct: 35.5, leftPct: 55.6 }, // Right lens - perfectly centered
 ];
 
 export default function AvatarEye() {
