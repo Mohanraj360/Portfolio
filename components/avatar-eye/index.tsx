@@ -5,19 +5,17 @@ import { useEffect, useRef } from "react";
 export default function AvatarEye() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Precise layout target coordinates mapped to the image proportions
+  // Re-calibrated center coordinates specifically for when the image is cropped via object-fit cover
   const eyeTargets = [
-    { xPercent: 0.443, yPercent: 0.358, radius: 8 }, // Left Eye Center
-    { xPercent: 0.552, yPercent: 0.358, radius: 8 }  // Right Eye Center
+    { xPercent: 0.445, yPercent: 0.358, radius: 6 }, // Left Eye
+    { xPercent: 0.552, yPercent: 0.358, radius: 6 }  // Right Eye
   ];
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const img = imgRef.current;
-    const container = containerRef.current;
-    if (!canvas || !img || !container) return;
+    if (!canvas || !img) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -31,7 +29,6 @@ export default function AvatarEye() {
     };
 
     const resizeCanvas = () => {
-      // Sync canvas sizing perfectly to the active image layout dimensions
       canvas.width = img.clientWidth;
       canvas.height = img.clientHeight;
       drawEyes();
@@ -42,34 +39,35 @@ export default function AvatarEye() {
       const rect = canvas.getBoundingClientRect();
 
       eyeTargets.forEach((target) => {
-        // Calculate the absolute positions dynamically
+        // Dynamic absolute scaling coordinates
         const eyeX = rect.left + target.xPercent * canvas.width;
         const eyeY = rect.top + target.yPercent * canvas.height;
 
         const angle = Math.atan2(mouse.y - eyeY, mouse.x - eyeX);
         
-        const maxOffset = 3;
+        // Small constraint range so it rotates entirely within your glasses rims
+        const maxOffset = 2;
         const offsetX = Math.cos(angle) * maxOffset;
         const offsetY = Math.sin(angle) * maxOffset;
 
         const pupilX = target.xPercent * canvas.width + offsetX;
         const pupilY = target.yPercent * canvas.height + offsetY;
 
-        // 1. Draw a clean white base layer to cover up old static pupils
+        // 1. Draw crisp white backplate over the old graphic's eyes
         ctx.beginPath();
         ctx.arc(target.xPercent * canvas.width, target.yPercent * canvas.height, target.radius + 1, 0, Math.PI * 2);
         ctx.fillStyle = "#ffffff";
         ctx.fill();
 
-        // 2. Draw the dynamic tracking black iris on top
+        // 2. Draw the tracking black pupil
         ctx.beginPath();
-        ctx.arc(pupilX, pupilY, target.radius - 1, 0, Math.PI * 2);
+        ctx.arc(pupilX, pupilY, target.radius - 2, 0, Math.PI * 2);
         ctx.fillStyle = "#000000";
         ctx.fill();
 
-        // 3. Realistic catch-light glint reflection
+        // 3. Highlight reflection dot
         ctx.beginPath();
-        ctx.arc(pupilX - 2, pupilY - 2, 1.5, 0, Math.PI * 2);
+        ctx.arc(pupilX - 1.5, pupilY - 1.5, 1, 0, Math.PI * 2);
         ctx.fillStyle = "#ffffff";
         ctx.fill();
       });
@@ -92,14 +90,13 @@ export default function AvatarEye() {
 
   return (
     <div 
-      ref={containerRef} 
       style={{ 
         position: "relative", 
-        width: "280px",       // Standard responsive container size
-        height: "280px",      // Perfect square constraints
+        width: "240px",       
+        height: "240px",      
         display: "inline-block",
         overflow: "hidden",
-        borderRadius: "12px"  // Smooth avatar borders
+        borderRadius: "50%"  // Optional: makes the avatar a clean circular badge, or remove for square
       }}
     >
       <img
@@ -110,7 +107,7 @@ export default function AvatarEye() {
           width: "100%", 
           height: "100%",
           display: "block",
-          objectFit: "cover", // 🔹 This instantly crops out the black bars entirely like a stack crop
+          objectFit: "cover", 
           pointerEvents: "none"
         }}
       />
