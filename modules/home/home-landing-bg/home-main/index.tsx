@@ -85,7 +85,8 @@ export default function HomeMain() {
           css`
             display: block;
             font-size: 0.85em;
-            color: isDataAnalyst ? '#38bdf8' : '#ffffff';
+            /* FIXED: Evaluates properly via interpolation template now */
+            color: ${isDataAnalyst ? '#38bdf8' : '#ffffff'};
             opacity: 0;
             animation: ${fadeInUp} 1s cubic-bezier(0.16, 1, 0.3, 1) ${0.15 * index}s forwards;
           `
@@ -114,7 +115,6 @@ export default function HomeMain() {
           `
         ]}
       >
-        {/* CHANGED: Mapping over h1Contents to perfectly match your data export */}
         {h1Contents.map(h1Mapper)}
       </h1>
       
